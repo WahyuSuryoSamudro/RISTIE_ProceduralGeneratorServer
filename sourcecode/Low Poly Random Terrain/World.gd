@@ -1,18 +1,24 @@
 extends Spatial
 
 export var period = 80
-export var octaves = 6
+export var octaves = 2
+var noise = OpenSimplexNoise.new() # i think im going to initialize globally so later on noise object can be used for all function
+export var xResGen = 1024
+export var yResGen = 1024
+export var terrainGenSmoothingSubdivision_depth = 640
+export var terrainGenSmoothingSubdivision_width = 640
 
 func _ready():
 	randomize()
-	var noise = OpenSimplexNoise.new()
+	# Lets use a predetermined seed for this experiment (what we wanted is a configuration which persist on all sessions without the needed to save the whole maps)
+	noise.seed = 6969696969
 	noise.period = period
 	noise.octaves = octaves
 	
 	var plane_mesh = PlaneMesh.new()
-	plane_mesh.size = Vector2(400,400)
-	plane_mesh.subdivide_depth = 200
-	plane_mesh.subdivide_width = 200
+	plane_mesh.size = Vector2(xResGen,yResGen)
+	plane_mesh.subdivide_depth = terrainGenSmoothingSubdivision_depth
+	plane_mesh.subdivide_width = terrainGenSmoothingSubdivision_width
 	
 	var surface_tool = SurfaceTool.new()
 	surface_tool.create_from(plane_mesh,0)
@@ -39,8 +45,9 @@ func _ready():
 	
 	var mesh_instance = MeshInstance.new()
 	mesh_instance.mesh = surface_tool.commit()
+	mesh_instance.set_surface_material(0, load("res://terrainHeightLevelColouring.material"))
 	
 	add_child(mesh_instance)
 
 func _process(delta):
-	$Rotate.rotate_y(delta*0.5)
+	$RotateViewPort.rotate_y(delta*0.04)

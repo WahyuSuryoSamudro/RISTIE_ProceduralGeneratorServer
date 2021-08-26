@@ -1,16 +1,28 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
+[ext_resource path="res://terrainHeightLevelColouring.material" type="Material" id=2]
+
+[sub_resource type="SphereMesh" id=1]
 
 [node name="World" type="Spatial"]
 script = ExtResource( 1 )
 period = 50
-octaves = 15
+octaves = 1
+terrainGenSmoothingSubdivision_depth = 311
+terrainGenSmoothingSubdivision_width = 311
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.856763, 0.515711, 0, -0.515711, 0.856763, 0, 57.8641, 28.6371 )
+transform = Transform( 0.995914, -0.0811599, -0.039615, 0.0853357, 0.702075, 0.706971, -0.029565, -0.707463, 0.706132, 0, 125.065, 28.6371 )
 
-[node name="Rotate" type="Spatial" parent="."]
+[node name="RotateViewPort" type="Spatial" parent="."]
 
-[node name="Camera" type="Camera" parent="Rotate"]
-transform = Transform( 1, 0, 0, 0, 0.841115, 0.540857, 0, -0.540857, 0.841115, 0, 18.6674, 26.3036 )
+[node name="Camera" type="Camera" parent="RotateViewPort"]
+transform = Transform( 1, 0, 0, 0, 0.841115, 0.540857, 0, -0.540857, 0.841115, 0, 57.4576, 230.525 )
+fov = 93.1
+
+[node name="MaterialCreationTemp" type="Node" parent="."]
+
+[node name="MeshInstance" type="MeshInstance" parent="MaterialCreationTemp"]
+mesh = SubResource( 1 )
+material/0 = ExtResource( 2 )
